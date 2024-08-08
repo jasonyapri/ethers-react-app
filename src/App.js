@@ -2,12 +2,16 @@ import logo from './logo.svg';
 import './App.css';
 import React, { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
+import contractABI from './contract_abi.json';
 
 function App() {
 
-  const [balance, setBalance] = useState(null);
-  const [contractAddress, setContractAddress] = useState('');
   const [walletAddress, setWalletAddress] = useState('');
+  const [balance, setBalance] = useState(null);
+  const CONTRACT_ADDRESS = '0xCE01DD4088D32B556433D83918F56d7f56Fb63Ef';
+  const [contract, setContract] = useState(null);
+  const [number, setNumber] = useState(null);
+
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
 
@@ -34,6 +38,17 @@ function App() {
     };
 
     fetchWalletAddress();
+
+    const contract = new ethers.Contract(CONTRACT_ADDRESS, contractABI, provider);
+    setContract(contract);
+
+    const fetchNumber = async () => {
+      const number = await contract.number();
+      setNumber(number.toNumber());
+    }
+
+    fetchNumber();
+
   }, []);
 
   const getBalance = async () => {
@@ -48,7 +63,7 @@ function App() {
   return (
     <div className="App">
       <h1>Check ETH Balance</h1>
-      <div>Wallet: { walletAddress }</div>
+      <p>Connected Wallet Address: { walletAddress }</p>
       <button onClick={getBalance}>Get Balance</button>
       {balance && (
         <div>
@@ -56,6 +71,9 @@ function App() {
           <p>{balance} ETH</p>
         </div>
       )}
+      <hr />
+      <p>Smart Contract Address: { contract && contract.address }</p>
+      <p>Number: { number }</p>
     </div>
   );
 }
