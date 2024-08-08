@@ -57,7 +57,7 @@ function App() {
     const subscribeToEvents = async () => {
       if (contract) {
         contract.on('NumberSet', (arg1) => {
-          const numberValue = arg1.toString(); // Convert BigNumber to string
+          const numberValue = arg1.toString();
           setEvents((prevEvents) => [...prevEvents, { numberValue }]);
         });
       }
@@ -114,10 +114,10 @@ function App() {
       try {
         const signer = provider.getSigner();
         const contractWithSigner = contract.connect(signer);
-        const tx = await contractWithSigner.setNumber(parseInt(inputValue)); // Assuming setNumber is a function in your contract
+        const tx = await contractWithSigner.setNumber(parseInt(inputValue));
         await tx.wait();
         setNumber(parseInt(inputValue));
-        setInputValue(''); // Clear the input field
+        setInputValue('');
       } catch (error) {
         console.error('Error setting number:', error);
       }
