@@ -11,7 +11,7 @@ function App() {
   const CONTRACT_ADDRESS = '0xCE01DD4088D32B556433D83918F56d7f56Fb63Ef';
   const [contract, setContract] = useState(null);
   const [number, setNumber] = useState(null);
-
+  const [inputValue, setInputValue] = useState('');
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
 
@@ -60,6 +60,49 @@ function App() {
     }
   };
 
+  const incrementNumber = async () => {
+    if (contract) {
+      try {
+        const signer = provider.getSigner();
+        const contractWithSigner = contract.connect(signer);
+        const tx = await contractWithSigner.increment();
+        await tx.wait();
+        setNumber(number + 1);
+      } catch (error) {
+        console.error('Error incrementing number:', error);
+      }
+    }
+  };
+
+  const decrementNumber = async () => {
+    if (contract) {
+      try {
+        const signer = provider.getSigner();
+        const contractWithSigner = contract.connect(signer);
+        const tx = await contractWithSigner.decrement();
+        await tx.wait();
+        setNumber(number - 1);
+      } catch (error) {
+        console.error('Error decrementing number:', error);
+      }
+    }
+  };
+
+  const handleSetNumber = async () => {
+    if (contract) {
+      try {
+        const signer = provider.getSigner();
+        const contractWithSigner = contract.connect(signer);
+        const tx = await contractWithSigner.setNumber(parseInt(inputValue)); // Assuming setNumber is a function in your contract
+        await tx.wait();
+        setNumber(parseInt(inputValue));
+        setInputValue(''); // Clear the input field
+      } catch (error) {
+        console.error('Error setting number:', error);
+      }
+    }
+  };
+
   return (
     <div className="App">
       <h1>Check ETH Balance</h1>
@@ -74,6 +117,19 @@ function App() {
       <hr />
       <p>Smart Contract Address: { contract && contract.address }</p>
       <p>Number: { number }</p>
+      <div>
+        <button onClick={incrementNumber}>Increment</button> <button onClick={decrementNumber}>Decrement</button>
+      </div>
+      <br />
+      <div>
+        <input 
+            type="text" 
+            value={inputValue} 
+            onChange={(e) => setInputValue(e.target.value)} 
+            placeholder="Enter number" 
+          />
+          <button onClick={handleSetNumber}>Set Number</button>
+      </div>
     </div>
   );
 }
