@@ -8,7 +8,7 @@ function App() {
 
   const [walletAddress, setWalletAddress] = useState('');
   const [balance, setBalance] = useState(null);
-  const CONTRACT_ADDRESS = '0xCE01DD4088D32B556433D83918F56d7f56Fb63Ef';
+  const CONTRACT_ADDRESS = '0x51eAF6F84C21e7297C5CFc17Cfd0fBb4e513fbC8';
   const [contract, setContract] = useState(null);
   const [number, setNumber] = useState(null);
   const [inputValue, setInputValue] = useState('');
