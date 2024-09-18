@@ -59,6 +59,7 @@ function App() {
         contract.on('NumberSet', (arg1) => {
           const numberValue = arg1.toString();
           setEvents((prevEvents) => [...prevEvents, { numberValue }]);
+          setNumber(numberValue);
         });
       }
     };
